@@ -8,8 +8,8 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="146dp"
-
+        android:layout_height="180dp"
+        android:padding="1dp"
         card_view:layout_constraintBottom_toBottomOf="parent"
         card_view:layout_constraintEnd_toEndOf="parent"
 
@@ -22,38 +22,29 @@
         <androidx.cardview.widget.CardView
             android:id="@+id/card_view"
             android:layout_width="match_parent"
-
-            android:layout_height="146dp"
+            android:layout_height="160dp"
             android:layout_gravity="center"
-            card_view:cardCornerRadius="4dp">
-            <RelativeLayout android:layout_height="match_parent"
-                android:layout_width="match_parent">
+            android:backgroundTint="@color/prim"
+            android:layout_marginTop="8dp"
+            card_view:cardCornerRadius="32dp">
 
-                <TextView
-                    android:layout_width="match_parent"
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
-                    android:layout_height="match_parent"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentTop="true"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentRight="true"
-                    android:layout_alignParentBottom="true"
-                    android:layout_marginLeft="0dp"
-                    android:background="@drawable/shapetext"
-                   />
 
                 <TextView
                     android:id="@+id/state"
-                    android:layout_width="wrap_content"
+                    android:layout_width="355dp"
                     android:layout_height="50dp"
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentTop="true"
                     android:layout_alignParentEnd="true"
                     android:layout_alignParentRight="true"
-                    android:layout_marginLeft="9dp"
+                    android:layout_marginLeft="14dp"
                     android:layout_marginTop="7dp"
-                    android:layout_marginEnd="268dp"
-                    android:layout_marginRight="268dp"
+                    android:layout_marginEnd="40dp"
+                    android:layout_marginRight="40dp"
                     android:background="@drawable/shapetext"
                     android:padding="10dp"
                     android:text="Maharashtra"
@@ -77,6 +68,7 @@
                     android:textColor="@color/purple_500" />
 
                 <TextView
+                    android:id="@+id/confirmedCases"
                     android:layout_width="wrap_content"
                     android:layout_height="24dp"
                     android:layout_below="@+id/state"
@@ -86,9 +78,7 @@
                     android:layout_marginTop="46dp"
                     android:layout_marginBottom="25dp"
                     android:hint="18312"
-                    android:id="@+id/confirmedCases"
-                    android:textColor="@color/purple_500"
-                    android:textColorHint="" />
+                    android:textColor="@color/purple_500" />
 
                 <TextView
                     android:id="@+id/deceased"
@@ -116,8 +106,7 @@
                     android:layout_toEndOf="@+id/cases"
                     android:layout_toRightOf="@+id/cases"
                     android:hint="18312"
-                    android:textColor="@color/red"
-                    android:textColorHint="" />
+                    android:textColor="@color/red" />
 
                 <TextView
                     android:id="@+id/recovered"
@@ -145,8 +134,7 @@
                     android:layout_toEndOf="@+id/deceased"
                     android:layout_toRightOf="@+id/deceased"
                     android:hint="18312"
-                    android:textColor="@color/green"
-                    android:textColorHint="" />
+                    android:textColor="@color/green" />
 
 
             </RelativeLayout>
