@@ -100,9 +100,6 @@ class MainActivity : AppCompatActivity() {
                     while (keys.hasNext()) {
                         // loop to get the dynamic key
                         val state = keys.next() as String
-
-                        //)// states updated
-
                         val confirmed = jsonObj.getJSONObject(state).getJSONObject("total").getString("confirmed") as String
                         //cases  updated
                         val deceased = jsonObj.getJSONObject(state).getJSONObject("total").getString("deceased") as String
