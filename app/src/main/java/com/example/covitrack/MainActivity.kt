@@ -1,7 +1,9 @@
 package com.example.covitrack
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.ListView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.android.volley.Request
@@ -12,9 +14,15 @@ import org.json.JSONObject
 
 
 class MainActivity : AppCompatActivity() {
-      private lateinit var ls:ListView
-      private lateinit var states: ArrayList<String>
+    private lateinit var ls:ListView
+    private lateinit var states: ArrayList<String>
     private lateinit var cases : ArrayList<String>
+    private lateinit var deaths : ArrayList<String>
+    private lateinit var recovered : ArrayList<String>
+    private lateinit var abbrev :ArrayList<String>
+    private lateinit var totalCases : TextView
+    private lateinit var totalDeaths : TextView
+    private lateinit var totalRecovered : TextView
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
@@ -23,50 +31,101 @@ class MainActivity : AppCompatActivity() {
 
         states = arrayListOf()
         cases = arrayListOf()
-        getData()
-
-        val deaths: Array<Int> = arrayOf(4333, 3214, 3121,4252,7451,14314)
-        val recovered: Array<Int> = arrayOf(2323, 4242, 2352, 2342,2343,742)
+        deaths = arrayListOf()
+        recovered = arrayListOf()
+        abbrev = arrayListOf()
+        totalCases = findViewById(R.id.totalConf)
+        totalDeaths = findViewById(R.id.totalDec)
+        totalRecovered = findViewById(R.id.totalRec)
+        getData() // calling api
         val myListAdapter = MyListAdapter(this,states, cases, deaths, recovered)
         ls.adapter = myListAdapter
 
         ls.setOnItemClickListener() { adapterView, view, position, id ->
-            val itemAtPos = adapterView.getItemAtPosition(position)
-            val itemIdAtPos = adapterView.getItemIdAtPosition(position)
-            Toast.makeText(
-                this,
-                "Click on item at $itemAtPos its item id $itemIdAtPos",
-                Toast.LENGTH_LONG
-            ).show()
+            val itemAtPos = abbrev[position]
+            val intent = Intent(this, Details::class.java).apply {
+                putExtra("state",itemAtPos)
+            }
+            startActivity(intent)
         }
     }
         private fun getData(){
-// Instantiate the RequestQueue.
-
+            // Instantiate the RequestQueue.
+            val stateAbv = mutableMapOf(
+                "AN" to "Andaman and Nicobar Islands",
+                "AP" to "Andhra Pradesh",
+                "AR" to "Arunachal Pradesh",
+                "AS" to "Assam",
+                "BR" to "Bihar",
+                "CH" to "Chandigarh",
+                "CT" to "Chhattisgarh",
+                "DL" to "Delhi",
+                "DN" to "Dadra and Nagar Haveli",
+                "GA" to "Goa",
+                "GJ" to "Gujarat",
+                "HP" to "Himachal Pradesh",
+                "HR" to "Haryana",
+                "JH" to "Jharkhand",
+                "JK" to "Jammu and Kashmir",
+                "KA" to "Karnataka",
+                "KL" to "Kerala",
+                "LA" to "Ladakh",
+                "LD" to "Lakshadweep",
+                "MH" to "Maharashtra",
+                "ML" to "Meghalaya",
+                "MN" to "Manipur",
+                "MP" to "Madhya Pradesh",
+                "MZ" to "Mizoram",
+                "NL" to "Nagaland",
+                "OR" to "Odisha",
+                "PB" to "Punjab",
+                "PY" to "Pondicherry",
+                "RJ" to "Rajasthan",
+                "SK" to "Sikkim",
+                "TG" to "Telangana",
+                "TN" to "Tamil Nadu",
+                "TR" to "Tripura",
+                "UP" to "Uttar Pradesh",
+                "UT" to "Uttarakhand",
+                "WB" to "West Bengal"
+            )
             val queue = Volley.newRequestQueue(this)
             val url = "https://data.covid19india.org/v4/min/data.min.json"
-// Request a string response from the provided URL.
-
+            // Request a string response from the provided URL.
             val sr = StringRequest(Request.Method.GET, url, Response.Listener { response ->
                 val jsonObj = JSONObject(response)
-                    // Display the first 500 characters of the response string.
                    // val data: JSONObject = jsonObj.getJSONObject("AN")
                     val keys: Iterator<*> = jsonObj.keys()
 
-
                     while (keys.hasNext()) {
                         // loop to get the dynamic key
-                        val currentDynamicKey = keys.next() as String
-                        states.add(currentDynamicKey) // states updated
+                        val state = keys.next() as String
 
+                        //)// states updated
 
-                       val currentDynamicValue = jsonObj.getJSONObject(currentDynamicKey).getJSONObject("total").getString("confirmed") as String
-                        cases.add(currentDynamicValue) //cases  updated
-
-
+                        val confirmed = jsonObj.getJSONObject(state).getJSONObject("total").getString("confirmed") as String
+                        //cases  updated
+                        val deceased = jsonObj.getJSONObject(state).getJSONObject("total").getString("deceased") as String
+                        //no. of deaths
+                        val rec = jsonObj.getJSONObject(state).getJSONObject("total").getString("recovered") as String
+                         // recovered patients
+                        if(state == "TT")
+                        {
+                            totalCases.text = confirmed
+                            totalDeaths.text = deceased
+                            totalRecovered.text = rec
+                        }
+                        else {
+                            states.add(stateAbv[state].toString())
+                            abbrev.add(state)
+                            cases.add(confirmed)
+                            recovered.add(rec)
+                            deaths.add(deceased)
+                        }
                     }
+
                 },
-                { "That didn't work!" })
+                { getString(R.string.apiFailed) })
 
 // Add the request to the RequestQueue.
             queue.add(sr)

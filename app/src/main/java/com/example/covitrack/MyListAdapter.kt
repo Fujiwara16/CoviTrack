@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.TextView
 
-class MyListAdapter(private val context: Activity, private val state: ArrayList<String>, private val cases: ArrayList<String>, private val deceased: Array<Int>, private val rec: Array<Int>)
+class MyListAdapter(private val context: Activity, private val state: ArrayList<String>, private val cases: ArrayList<String>, private val deceased: ArrayList<String>, private val rec: ArrayList<String>)
     : ArrayAdapter<String>(context, R.layout.list, state) {
     override fun getView(position: Int, view: View?, parent: ViewGroup): View {
         val inflater = context.layoutInflater
