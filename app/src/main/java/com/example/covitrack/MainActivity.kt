@@ -7,6 +7,8 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.android.volley.Request
+import com.android.volley.RequestQueue
+import com.android.volley.RequestQueue.RequestFilter
 import com.android.volley.Response
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
@@ -23,6 +25,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var totalCases : TextView
     private lateinit var totalDeaths : TextView
     private lateinit var totalRecovered : TextView
+    private lateinit var queue:RequestQueue
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
@@ -38,6 +41,7 @@ class MainActivity : AppCompatActivity() {
         totalDeaths = findViewById(R.id.totalDec)
         totalRecovered = findViewById(R.id.totalRec)
         getData() // calling api
+        Toast.makeText(this, "Welcome", Toast.LENGTH_SHORT).show()
         val myListAdapter = MyListAdapter(this,states, cases, deaths, recovered)
         ls.adapter = myListAdapter
 
@@ -89,7 +93,7 @@ class MainActivity : AppCompatActivity() {
                 "UT" to "Uttarakhand",
                 "WB" to "West Bengal"
             )
-            val queue = Volley.newRequestQueue(this)
+             queue = Volley.newRequestQueue(this)
             val url = "https://data.covid19india.org/v4/min/data.min.json"
             // Request a string response from the provided URL.
             val sr = StringRequest(Request.Method.GET, url, Response.Listener { response ->
@@ -98,8 +102,10 @@ class MainActivity : AppCompatActivity() {
                     val keys: Iterator<*> = jsonObj.keys()
 
                     while (keys.hasNext()) {
+
                         // loop to get the dynamic key
                         val state = keys.next() as String
+
                         val confirmed = jsonObj.getJSONObject(state).getJSONObject("total").getString("confirmed") as String
                         //cases  updated
                         val deceased = jsonObj.getJSONObject(state).getJSONObject("total").getString("deceased") as String
@@ -127,4 +133,9 @@ class MainActivity : AppCompatActivity() {
 // Add the request to the RequestQueue.
             queue.add(sr)
         }
+
+    override fun onBackPressed() {
+        queue.cancelAll(RequestFilter { true })
+        super.onBackPressed()
+    }
     }
