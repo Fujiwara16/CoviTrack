@@ -41,17 +41,7 @@ class MainActivity : AppCompatActivity() {
         totalDeaths = findViewById(R.id.totalDec)
         totalRecovered = findViewById(R.id.totalRec)
         getData() // calling api
-        Toast.makeText(this, "Welcome", Toast.LENGTH_SHORT).show()
-        val myListAdapter = MyListAdapter(this,states, cases, deaths, recovered)
-        ls.adapter = myListAdapter
 
-        ls.setOnItemClickListener() { adapterView, view, position, id ->
-            val itemAtPos = abbrev[position]
-            val intent = Intent(this, Details::class.java).apply {
-                putExtra("state",itemAtPos)
-            }
-            startActivity(intent)
-        }
     }
         private fun getData(){
             // Instantiate the RequestQueue.
@@ -132,8 +122,22 @@ class MainActivity : AppCompatActivity() {
 
 // Add the request to the RequestQueue.
             queue.add(sr)
+            inflate()
         }
+    private fun inflate(){
+        Toast.makeText(this, "Welcome", Toast.LENGTH_SHORT).show()
 
+        val myListAdapter = MyListAdapter(this,states, cases, deaths, recovered)
+        ls.adapter = myListAdapter
+
+        ls.setOnItemClickListener() { adapterView, view, position, id ->
+            val itemAtPos = abbrev[position]
+            val intent = Intent(this, Details::class.java).apply {
+                putExtra("state",itemAtPos)
+            }
+            startActivity(intent)
+        }
+    }
     override fun onBackPressed() {
         queue.cancelAll(RequestFilter { true })
         super.onBackPressed()
