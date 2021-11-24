@@ -116,16 +116,16 @@ class MainActivity : AppCompatActivity() {
                             deaths.add(deceased)
                         }
                     }
-
+                inflate()
                 },
                 { getString(R.string.apiFailed) })
 
 // Add the request to the RequestQueue.
             queue.add(sr)
-            inflate()
+
         }
     private fun inflate(){
-        Toast.makeText(this, "Welcome", Toast.LENGTH_SHORT).show()
+      //  Toast.makeText(this, "Welcome", Toast.LENGTH_SHORT).show()
 
         val myListAdapter = MyListAdapter(this,states, cases, deaths, recovered)
         ls.adapter = myListAdapter
